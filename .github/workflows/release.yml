@@ -1,0 +1,78 @@
+name: Build & release launcher
+
+# Draait automatisch zodra je een versietag pusht, bv.:
+#   git tag v1.0.1
+#   git push origin v1.0.1
+#
+# Bouwt Windows op een echte Windows-runner en macOS op een echte Mac-runner
+# (allebei gratis via GitHub Actions), en zet de resultaten als GitHub Release
+# op deze repo, met het versienummer uit de tag (zonder de "v").
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install vpk
+        run: dotnet tool install -g vpk
+
+      - name: Voeg dotnet-tools toe aan PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+      - name: Versienummer uit tag halen (v1.0.0 -> 1.0.0)
+        id: version
+        run: echo "version=$($env:GITHUB_REF_NAME.TrimStart('v'))" >> $env:GITHUB_OUTPUT
+
+      - name: Publish (self-contained, win-x64)
+        run: dotnet publish CaptainSeasLauncher/CaptainSeasLauncher.csproj -c Release -r win-x64 --self-contained -o publish/win-x64
+
+      - name: Pack met vpk
+        run: vpk pack -u CaptainSeasLauncher -v ${{ steps.version.outputs.version }} -o releases/win -p publish/win-x64 -e CaptainSeasLauncher.exe --icon CaptainSeasLauncher/Assets/AppIcon.ico
+
+      - name: Upload naar GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: vpk upload github --repoUrl https://github.com/${{ github.repository }} --tag ${{ github.ref_name }} --publish -o releases/win
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install vpk
+        run: dotnet tool install -g vpk
+
+      - name: Voeg dotnet-tools toe aan PATH
+        run: echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - name: Versienummer uit tag halen (v1.0.0 -> 1.0.0)
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish (self-contained, osx-arm64)
+        run: dotnet publish CaptainSeasLauncher/CaptainSeasLauncher.csproj -c Release -r osx-arm64 --self-contained -o publish/osx-arm64
+
+      - name: Pack met vpk (portable .app, geen .pkg — zie README)
+        run: vpk pack -u CaptainSeasLauncher -v ${{ steps.version.outputs.version }} -o releases/mac -p publish/osx-arm64 -e CaptainSeasLauncher --icon CaptainSeasLauncher/Assets/AppIcon.icns --noInst
+
+      - name: Upload naar GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: vpk upload github --repoUrl https://github.com/${{ github.repository }} --tag ${{ github.ref_name }} --publish -o releases/mac
