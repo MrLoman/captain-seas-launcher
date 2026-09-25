@@ -236,3 +236,43 @@ bevestigingsvraag:
 
 Dit werkt alleen bij een echt geïnstalleerde versie — start je de launcher via `dotnet run`
 in development, dan krijg je een duidelijke foutmelding in plaats van een crash.
+
+---
+
+## Nieuw: Windows-build via GitHub Actions (i.p.v. lokaal op je Mac)
+
+Bleek dat `vpk` op macOS alleen macOS-pakketten kan bouwen — écht cross-compilen naar een
+Windows-installer vanaf een Mac lukt niet met deze tool. Oplossing: `.github/workflows/release.yml`
+laat GitHub zelf een gratis Windows- én Mac-runner starten die alles automatisch bouwt en
+publiceert, zodra je een versietag pusht.
+
+### Gebruiken
+
+```bash
+cd Launcher
+git add .github/workflows/release.yml
+git commit -m "Add CI workflow for building and releasing the launcher"
+git push
+
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Die laatste `git push origin v1.0.0` triggert de workflow. Volg 'm live op:
+`github.com/MrLoman/captain-seas-launcher/actions`
+
+Na een paar minuten (Windows + macOS builden parallel) staat de release compleet met beide
+platforms op `github.com/MrLoman/captain-seas-launcher/releases` — inclusief het juiste
+Windows-icoon (dat lukt nu wél, want deze build draait op een échte Windows-machine).
+
+### Bij een volgende versie
+
+Alleen dit twee-regelige stapje, verder niks lokaal builden/packen/uploaden meer nodig:
+
+```bash
+git tag v1.1.0
+git push origin v1.1.0
+```
+
+Lokaal op je Mac (`dotnet run`) blijft gewoon werken om te testen tijdens het ontwikkelen —
+alleen het **uitbrengen** van een release verloopt voortaan via deze workflow.
