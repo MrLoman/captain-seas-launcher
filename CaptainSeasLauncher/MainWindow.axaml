@@ -27,7 +27,7 @@
                 Background="#D0102040" CornerRadius="6">
             <StackPanel Orientation="Horizontal" Spacing="12">
                 <TextBlock x:Name="LauncherUpdateText"
-                           Text="Nieuwe versie van de launcher beschikbaar"
+                           Text="A new launcher version is available"
                            Foreground="White" VerticalAlignment="Center" FontSize="13" />
                 <Button x:Name="UpdateLauncherButton" Content="UPDATE LAUNCHER"
                         Click="OnUpdateLauncherClicked" FontSize="12" FontWeight="Bold" Padding="12,6" />
@@ -36,19 +36,21 @@
 
         <!-- Onderbalk: status, voortgang, uninstall-link, SPEEL-knop -->
         <StackPanel VerticalAlignment="Bottom" Margin="30,0,30,25" Spacing="8">
-            <TextBlock x:Name="StatusText" Text="Bezig met controleren op updates..."
+            <TextBlock x:Name="StatusText" Text="Checking for updates..."
                        Foreground="White" FontSize="14" />
             <ProgressBar x:Name="Progress" Minimum="0" Maximum="100"
                          Height="8" IsVisible="False" />
             <Grid ColumnDefinitions="Auto,*,Auto">
-                <Button x:Name="UninstallButton" Grid.Column="0" Content="Verwijderen..."
+                <Button x:Name="UninstallButton" Grid.Column="0" Content="Uninstall..."
                         Click="OnUninstallClicked"
                         Background="Transparent" BorderThickness="0"
                         Foreground="#B0B0B0" FontSize="12"
                         HorizontalAlignment="Left" Padding="0" Cursor="Hand" />
-                <Button x:Name="PlayButton" Grid.Column="2" Content="SPEEL"
+                <Button x:Name="PlayButton" Grid.Column="2" Content="PLAY"
                         HorizontalAlignment="Right"
                         Padding="40,10" FontSize="16" FontWeight="Bold"
+                        Background="#D9A441" Foreground="#1A1208"
+                        BorderThickness="0" CornerRadius="4"
                         Click="OnPlayClicked" IsEnabled="False" />
             </Grid>
         </StackPanel>

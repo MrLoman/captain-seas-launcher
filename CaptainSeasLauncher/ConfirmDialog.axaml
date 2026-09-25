@@ -4,13 +4,13 @@
         Width="420" Height="190"
         CanResize="False"
         WindowStartupLocation="CenterOwner"
-        Title="Bevestigen">
+        Title="Confirm">
     <Grid RowDefinitions="*,Auto" Margin="20">
         <TextBlock x:Name="MessageText" Grid.Row="0" TextWrapping="Wrap"
                    VerticalAlignment="Center" FontSize="14" />
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-            <Button Content="Annuleren" Click="OnCancelClicked" Padding="16,8" />
-            <Button x:Name="ConfirmButton" Content="Ja, verwijderen" Click="OnConfirmClicked"
+            <Button Content="Cancel" Click="OnCancelClicked" Padding="16,8" />
+            <Button x:Name="ConfirmButton" Content="Yes, uninstall" Click="OnConfirmClicked"
                     Padding="16,8" Background="#B03030" Foreground="White" />
         </StackPanel>
     </Grid>

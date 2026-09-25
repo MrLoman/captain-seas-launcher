@@ -36,7 +36,7 @@ public static class UninstallService
         }
         else
         {
-            throw new PlatformNotSupportedException("Verwijderen wordt alleen ondersteund op Windows en macOS.");
+            throw new PlatformNotSupportedException("Uninstalling is only supported on Windows and macOS.");
         }
     }
 
@@ -63,8 +63,8 @@ public static class UninstallService
         if (!File.Exists(updateExe))
         {
             throw new FileNotFoundException(
-                "Kan Update.exe niet vinden. Draait de launcher wel als geïnstalleerde versie " +
-                "(via de Setup.exe), en niet via 'dotnet run'?", updateExe);
+                "Can't find Update.exe. Is the launcher running as an installed version " +
+                "(via Setup.exe), and not via 'dotnet run'?", updateExe);
         }
 
         Process.Start(new ProcessStartInfo(updateExe, "-s uninstall")
@@ -84,8 +84,8 @@ public static class UninstallService
         if (!appBundle.EndsWith(".app", StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
-                "Kon de .app-bundle niet vinden. Draait de launcher wel vanuit een geïnstalleerde " +
-                ".app, en niet via 'dotnet run'?");
+                "Can't find the .app bundle. Is the launcher running from an installed " +
+                ".app, and not via 'dotnet run'?");
         }
 
         var script = $"tell application \"Finder\" to move POSIX file \"{appBundle}\" to trash";

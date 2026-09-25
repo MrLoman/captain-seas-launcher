@@ -58,7 +58,7 @@ public sealed class GameUpdateService
             $"https://api.github.com/repos/{GitHubOwner}/{GitHubRepo}/releases/latest");
 
         if (release is null)
-            throw new InvalidOperationException("Kon geen release-informatie ophalen van GitHub.");
+            throw new InvalidOperationException("Could not fetch release information from GitHub.");
 
         var localVersion = GetLocalVersion();
         var updateAvailable = localVersion != release.TagName;
@@ -76,8 +76,8 @@ public sealed class GameUpdateService
         if (asset is null)
         {
             throw new InvalidOperationException(
-                $"Geen asset genaamd '{assetName}' gevonden in release {check.Release.TagName}. " +
-                "Controleer de bestandsnamen in GameUpdateService.cs en in je GitHub Release.");
+                $"No asset named '{assetName}' found in release {check.Release.TagName}. " +
+                "Check the file names in GameUpdateService.cs and in your GitHub Release.");
         }
 
         Directory.CreateDirectory(GameDir);
@@ -115,8 +115,8 @@ public sealed class GameUpdateService
         if (!File.Exists(path) && !Directory.Exists(path))
         {
             throw new FileNotFoundException(
-                $"Kan '{exeName}' niet vinden in {GameDir}. " +
-                "Controleer of de zip-structuur overeenkomt met WindowsExeName/MacAppName in GameUpdateService.cs.");
+                $"Can't find '{exeName}' in {GameDir}. " +
+                "Check that the zip structure matches WindowsExeName/MacAppName in GameUpdateService.cs.");
         }
 
         return path;

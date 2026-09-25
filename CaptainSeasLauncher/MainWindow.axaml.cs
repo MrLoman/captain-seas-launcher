@@ -36,12 +36,12 @@ public partial class MainWindow : Window
     {
         try
         {
-            SetStatus("Bezig met controleren op updates...");
+            SetStatus("Checking for updates...");
             var check = await _gameUpdateService.CheckForGameUpdateAsync();
 
             if (check.UpdateAvailable)
             {
-                SetStatus($"Nieuwe versie gevonden: {check.LatestVersion} — downloaden...");
+                SetStatus($"New version found: {check.LatestVersion} — downloading...");
                 Progress.IsVisible = true;
 
                 var progress = new Progress<double>(p =>
@@ -50,20 +50,20 @@ public partial class MainWindow : Window
                 await _gameUpdateService.DownloadAndInstallAsync(check, progress);
 
                 Progress.IsVisible = false;
-                SetStatus($"Klaar! Geïnstalleerde versie: {check.LatestVersion}");
+                SetStatus($"Ready! Installed version: {check.LatestVersion}");
             }
             else
             {
                 SetStatus(check.LocalVersion is null
-                    ? "Spel nog niet geïnstalleerd. Klik op SPEEL om te downloaden."
-                    : $"Je speelt de laatste versie ({check.LocalVersion}).");
+                    ? "Game not installed yet. Click PLAY to download it."
+                    : $"You're playing the latest version ({check.LocalVersion}).");
             }
 
             PlayButton.IsEnabled = true;
         }
         catch (Exception ex)
         {
-            SetStatus($"Kon niet controleren op updates: {ex.Message}");
+            SetStatus($"Couldn't check for updates: {ex.Message}");
             // Toch spelen toestaan als er al een lokale installatie staat.
             PlayButton.IsEnabled = _gameUpdateService.HasLocalInstall;
         }
@@ -78,7 +78,7 @@ public partial class MainWindow : Window
             await CheckForGameUpdateAsync();
             if (!_gameUpdateService.HasLocalInstall)
             {
-                SetStatus("Kon het spel niet downloaden.");
+                SetStatus("Couldn't download the game.");
                 PlayButton.IsEnabled = true;
                 return;
             }
@@ -92,7 +92,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            SetStatus($"Kon het spel niet starten: {ex.Message}");
+            SetStatus($"Couldn't start the game: {ex.Message}");
             PlayButton.IsEnabled = true;
         }
     }
@@ -124,19 +124,19 @@ public partial class MainWindow : Window
         if (_pendingLauncherUpdate is null) return;
 
         UpdateLauncherButton.IsEnabled = false;
-        LauncherUpdateText.Text = "Bezig met downloaden...";
+        LauncherUpdateText.Text = "Downloading...";
 
         try
         {
             await _launcherUpdateService.DownloadAsync(_pendingLauncherUpdate, percent =>
-                Dispatcher.UIThread.Post(() => LauncherUpdateText.Text = $"Downloaden... {percent}%"));
+                Dispatcher.UIThread.Post(() => LauncherUpdateText.Text = $"Downloading... {percent}%"));
 
             // Herstart de launcher meteen met de nieuwe versie.
             _launcherUpdateService.ApplyAndRestart(_pendingLauncherUpdate);
         }
         catch (Exception ex)
         {
-            LauncherUpdateText.Text = $"Update mislukt: {ex.Message}";
+            LauncherUpdateText.Text = $"Update failed: {ex.Message}";
             UpdateLauncherButton.IsEnabled = true;
         }
     }
@@ -148,8 +148,8 @@ public partial class MainWindow : Window
     private async void OnUninstallClicked(object? sender, RoutedEventArgs e)
     {
         var confirmed = await new ConfirmDialog(
-            "Weet je zeker dat je Captain of the Seas wilt verwijderen?\n\n" +
-            "Dit verwijdert zowel de launcher als de gedownloade game-bestanden.")
+            "Are you sure you want to uninstall Captain of the Seas?\n\n" +
+            "This removes both the launcher and the downloaded game files.")
             .ShowDialog<bool>(this);
 
         if (!confirmed) return;
@@ -157,12 +157,12 @@ public partial class MainWindow : Window
         try
         {
             UninstallButton.IsEnabled = false;
-            SetStatus("Bezig met verwijderen...");
+            SetStatus("Uninstalling...");
             UninstallService.UninstallAndExit();
         }
         catch (Exception ex)
         {
-            SetStatus($"Verwijderen mislukt: {ex.Message}");
+            SetStatus($"Uninstall failed: {ex.Message}");
             UninstallButton.IsEnabled = true;
         }
     }
