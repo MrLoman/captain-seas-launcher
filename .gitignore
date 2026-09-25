@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+publish/
+releases/
+*.user
+.DS_Store

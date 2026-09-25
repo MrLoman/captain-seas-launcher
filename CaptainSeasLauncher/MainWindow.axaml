@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="CaptainSeasLauncher.MainWindow"
+        Title="Captain of the Seas — Launcher"
+        Width="900" Height="520"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="Black">
+
+    <Panel>
+        <!-- Achtergrond -->
+        <Image Source="/Assets/background.jpg" Stretch="UniformToFill" />
+
+        <!-- Donkere overlay onderin voor leesbaarheid van tekst/knop -->
+        <Border VerticalAlignment="Bottom" Height="170" Background="#B0000000" />
+
+        <!-- Logo bovenin -->
+        <Image Source="/Assets/logo.png" Width="260"
+               HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" />
+
+        <!-- Update-banner voor de LAUNCHER zelf (los van de game-update in de onderbalk).
+             Verschijnt alleen als er een nieuwere launcher-versie op GitHub staat; update
+             gebeurt pas na klikken op de knop, nooit automatisch op de achtergrond. -->
+        <Border x:Name="LauncherUpdateBanner" IsVisible="False"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,25,25,0" Padding="16,10"
+                Background="#D0102040" CornerRadius="6">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock x:Name="LauncherUpdateText"
+                           Text="Nieuwe versie van de launcher beschikbaar"
+                           Foreground="White" VerticalAlignment="Center" FontSize="13" />
+                <Button x:Name="UpdateLauncherButton" Content="UPDATE LAUNCHER"
+                        Click="OnUpdateLauncherClicked" FontSize="12" FontWeight="Bold" Padding="12,6" />
+            </StackPanel>
+        </Border>
+
+        <!-- Onderbalk: status, voortgang, uninstall-link, SPEEL-knop -->
+        <StackPanel VerticalAlignment="Bottom" Margin="30,0,30,25" Spacing="8">
+            <TextBlock x:Name="StatusText" Text="Bezig met controleren op updates..."
+                       Foreground="White" FontSize="14" />
+            <ProgressBar x:Name="Progress" Minimum="0" Maximum="100"
+                         Height="8" IsVisible="False" />
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button x:Name="UninstallButton" Grid.Column="0" Content="Verwijderen..."
+                        Click="OnUninstallClicked"
+                        Background="Transparent" BorderThickness="0"
+                        Foreground="#B0B0B0" FontSize="12"
+                        HorizontalAlignment="Left" Padding="0" Cursor="Hand" />
+                <Button x:Name="PlayButton" Grid.Column="2" Content="SPEEL"
+                        HorizontalAlignment="Right"
+                        Padding="40,10" FontSize="16" FontWeight="Bold"
+                        Click="OnPlayClicked" IsEnabled="False" />
+            </Grid>
+        </StackPanel>
+    </Panel>
+</Window>

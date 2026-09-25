@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="CaptainSeasLauncher.ConfirmDialog"
+        Width="420" Height="190"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Title="Bevestigen">
+    <Grid RowDefinitions="*,Auto" Margin="20">
+        <TextBlock x:Name="MessageText" Grid.Row="0" TextWrapping="Wrap"
+                   VerticalAlignment="Center" FontSize="14" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <Button Content="Annuleren" Click="OnCancelClicked" Padding="16,8" />
+            <Button x:Name="ConfirmButton" Content="Ja, verwijderen" Click="OnConfirmClicked"
+                    Padding="16,8" Background="#B03030" Foreground="White" />
+        </StackPanel>
+    </Grid>
+</Window>
